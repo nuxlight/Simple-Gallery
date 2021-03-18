@@ -1239,5 +1239,29 @@
                 android:text="@string/import_settings" />
 
         </RelativeLayout>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/webdav_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/bigger_margin"
+            android:layout_marginTop="@dimen/section_margin"
+            android:text="@string/webdav_section"
+            android:textAllCaps="true"
+            android:textSize="@dimen/smaller_text_size" />
+
+        <RelativeLayout
+            android:id="@+id/webdav_url_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="@dimen/normal_margin"
+            android:paddingTop="@dimen/activity_margin"
+            android:paddingEnd="@dimen/normal_margin"
+            android:paddingBottom="@dimen/activity_margin">
+
+
+        </RelativeLayout>
     </LinearLayout>
 </ScrollView>

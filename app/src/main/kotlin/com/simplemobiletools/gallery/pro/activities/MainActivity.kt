@@ -11,6 +11,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.github.sardine.Sardine
+import com.github.sardine.SardineFactory
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
@@ -300,6 +303,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.sync -> debugDavFunc()
             R.id.sort -> showSortingDialog()
             R.id.filter -> showFilterMediaDialog()
             R.id.open_camera -> launchCamera()
@@ -318,6 +322,12 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun debugDavFunc() {
+        Log.i(localClassName, "Debug dav")
+        var sardine = SardineFactory.begin();
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

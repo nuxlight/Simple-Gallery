@@ -419,6 +419,8 @@
         <b>Reddit:</b>
         https://www.reddit.com/r/SimpleMobileTools
     </string>
+    <string name="webdav_section" translatable="false">Webdav</string>
+    <string name="sync">synchronization</string>
 
     <!--
         Haven't found some strings? There's more at
