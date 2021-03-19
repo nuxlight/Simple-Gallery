@@ -21,8 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.github.sardine.Sardine
-import com.github.sardine.SardineFactory
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
@@ -35,6 +33,7 @@ import com.simplemobiletools.commons.views.MyRecyclerView
 import com.simplemobiletools.gallery.pro.BuildConfig
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.DirectoryAdapter
+import com.simplemobiletools.gallery.pro.asynctasks.SyncDavAsynctask
 import com.simplemobiletools.gallery.pro.databases.GalleryDatabase
 import com.simplemobiletools.gallery.pro.dialogs.ChangeSortingDialog
 import com.simplemobiletools.gallery.pro.dialogs.ChangeViewTypeDialog
@@ -45,6 +44,8 @@ import com.simplemobiletools.gallery.pro.interfaces.DirectoryOperationsListener
 import com.simplemobiletools.gallery.pro.jobs.NewPhotoFetcher
 import com.simplemobiletools.gallery.pro.models.Directory
 import com.simplemobiletools.gallery.pro.models.Medium
+import com.thegrizzlylabs.sardineandroid.DavResource
+import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 import java.util.*
@@ -326,8 +327,13 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun debugDavFunc() {
         Log.i(localClassName, "Debug dav")
-        var sardine = SardineFactory.begin();
-
+        //val dav : List<DavResource> = sardine.list("https://file.nuxlight.xyz/seafdav")
+        val syncDavTask = SyncDavAsynctask("admin",
+            "insecure", "http://10.0.2.2:2342/originals/")
+        val result = syncDavTask.execute()
+        result.get().forEach{
+            Log.i(localClassName, it.name)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
