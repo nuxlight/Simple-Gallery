@@ -44,8 +44,6 @@ import com.simplemobiletools.gallery.pro.interfaces.DirectoryOperationsListener
 import com.simplemobiletools.gallery.pro.jobs.NewPhotoFetcher
 import com.simplemobiletools.gallery.pro.models.Directory
 import com.simplemobiletools.gallery.pro.models.Medium
-import com.thegrizzlylabs.sardineandroid.DavResource
-import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 import java.util.*
@@ -329,7 +327,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         Log.i(localClassName, "Debug dav")
         //val dav : List<DavResource> = sardine.list("https://file.nuxlight.xyz/seafdav")
         val syncDavTask = SyncDavAsynctask("admin",
-            "insecure", "http://10.0.2.2:2342/originals/")
+            "insecure", "http://192.168.1.6:2342/originals/")
         val result = syncDavTask.execute()
         result.get().forEach{
             Log.i(localClassName, it.name)
