@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -49,7 +50,7 @@ import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : SimpleActivity(), DirectoryOperationsListener {
+class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
     private val PICK_MEDIA = 2
     private val PICK_WALLPAPER = 3
     private val LAST_MEDIA_CHECK_PERIOD = 3000L
@@ -324,14 +325,15 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun debugDavFunc() {
+        directories_empty_placeholder.beGone()
+        directories_empty_placeholder_2.beGone()
+        davbar_progress.beVisible()
+        davbar_text.text = "WebDav synchronization..."
+        davbar_text.beVisible()
         Log.i(localClassName, "Debug dav")
-        //val dav : List<DavResource> = sardine.list("https://file.nuxlight.xyz/seafdav")
         val syncDavTask = SyncDavAsynctask("admin",
-            "insecure", "http://192.168.1.6:2342/originals/")
+            "davdav", "http://admin@192.168.1.6:2342/originals")
         val result = syncDavTask.execute()
-        result.get().forEach{
-            Log.i(localClassName, it.name)
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
