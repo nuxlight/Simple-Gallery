@@ -21,6 +21,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
@@ -45,7 +46,10 @@ import com.simplemobiletools.gallery.pro.interfaces.DirectoryOperationsListener
 import com.simplemobiletools.gallery.pro.jobs.NewPhotoFetcher
 import com.simplemobiletools.gallery.pro.models.Directory
 import com.simplemobiletools.gallery.pro.models.Medium
+import com.thegrizzlylabs.sardineandroid.DavResource
+import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -324,6 +328,7 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
         return true
     }
 
+    
     private fun debugDavFunc() {
         directories_empty_placeholder.beGone()
         directories_empty_placeholder_2.beGone()
@@ -331,9 +336,33 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
         davbar_text.text = "WebDav synchronization..."
         davbar_text.beVisible()
         Log.i(localClassName, "Debug dav")
-        val syncDavTask = SyncDavAsynctask("admin",
-            "davdav", "http://admin@192.168.1.6:2342/originals")
-        val result = syncDavTask.execute()
+        GlobalScope.launch {
+            val sardine = OkHttpSardine()
+            sardine.setCredentials("admin", "davdav")
+            try {
+                val resources = sardine.list("http://admin@192.168.1.6:2342/originals")
+                resources.forEach {
+                    Log.i(localClassName, it.name)
+                }
+                runOnUiThread {
+                    davbar_progress.beGone()
+                    davbar_text.beGone()
+                    directories_empty_placeholder.beVisible()
+                    directories_empty_placeholder_2.beVisible()
+                }
+
+            }
+            catch (e: IOException){
+                Log.e(localClassName, e.message)
+                e.printStackTrace()
+                runOnUiThread {
+                    davbar_text.text = "WebDav synchronization error...."
+                    davbar_progress.beGone()
+                }
+
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
