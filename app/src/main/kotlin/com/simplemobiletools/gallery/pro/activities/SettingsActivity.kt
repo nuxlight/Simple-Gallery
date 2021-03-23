@@ -92,6 +92,7 @@ class SettingsActivity : SimpleActivity() {
         setupExportSettings()
         setupImportSettings()
         invalidateOptionsMenu()
+        // TODO : Add Dav settings part
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -338,7 +338,7 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
         Log.i(localClassName, "Debug dav")
         GlobalScope.launch {
             val sardine = OkHttpSardine()
-            sardine.setCredentials("admin", "davdav")
+            sardine.setCredentials("admin", "insecure")
             try {
                 val resources = sardine.list("http://admin@192.168.1.6:2342/originals")
                 resources.forEach {

@@ -421,6 +421,7 @@
     </string>
     <string name="webdav_section" translatable="false">Webdav</string>
     <string name="sync">synchronization</string>
+    <string name="webdav_user_input">username</string>
 
     <!--
         Haven't found some strings? There's more at

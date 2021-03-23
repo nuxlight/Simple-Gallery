@@ -1251,7 +1251,7 @@
             android:textSize="@dimen/smaller_text_size" />
 
         <RelativeLayout
-            android:id="@+id/webdav_url_holder"
+            android:id="@+id/settings_webdav_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_margin"
@@ -1261,7 +1261,14 @@
             android:paddingEnd="@dimen/normal_margin"
             android:paddingBottom="@dimen/activity_margin">
 
-
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/settings_webdav_user_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingStart="@dimen/medium_margin"
+            android:text="@string/webdav_user_input" />
         </RelativeLayout>
+
     </LinearLayout>
 </ScrollView>
