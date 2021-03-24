@@ -1251,7 +1251,7 @@
             android:textSize="@dimen/smaller_text_size" />
 
         <RelativeLayout
-            android:id="@+id/settings_webdav_holder"
+            android:id="@+id/settings_webdav_server_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_margin"
@@ -1262,12 +1262,52 @@
             android:paddingBottom="@dimen/activity_margin">
 
         <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/settings_webdav_user_input"
+            android:id="@+id/webdav_server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingStart="@dimen/medium_margin"
-            android:text="@string/webdav_user_input" />
+            android:text="@string/webdav_url" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settings_webdav_username_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="@dimen/normal_margin"
+            android:paddingTop="@dimen/activity_margin"
+            android:paddingEnd="@dimen/normal_margin"
+            android:paddingBottom="@dimen/activity_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/webdav_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingStart="@dimen/medium_margin"
+            android:text="@string/webdav_username" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settings_webdav_password_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="@dimen/normal_margin"
+            android:paddingTop="@dimen/activity_margin"
+            android:paddingEnd="@dimen/normal_margin"
+            android:paddingBottom="@dimen/activity_margin">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/webdav_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/medium_margin"
+                android:text="@string/webdav_password" />
         </RelativeLayout>
 
     </LinearLayout>
