@@ -16,12 +16,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
@@ -35,7 +33,6 @@ import com.simplemobiletools.commons.views.MyRecyclerView
 import com.simplemobiletools.gallery.pro.BuildConfig
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.DirectoryAdapter
-import com.simplemobiletools.gallery.pro.asynctasks.SyncDavAsynctask
 import com.simplemobiletools.gallery.pro.databases.GalleryDatabase
 import com.simplemobiletools.gallery.pro.dialogs.ChangeSortingDialog
 import com.simplemobiletools.gallery.pro.dialogs.ChangeViewTypeDialog
@@ -46,8 +43,6 @@ import com.simplemobiletools.gallery.pro.interfaces.DirectoryOperationsListener
 import com.simplemobiletools.gallery.pro.jobs.NewPhotoFetcher
 import com.simplemobiletools.gallery.pro.models.Directory
 import com.simplemobiletools.gallery.pro.models.Medium
-import com.thegrizzlylabs.sardineandroid.DavResource
-import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import java.io.*
@@ -307,7 +302,7 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.sync -> debugDavFunc()
+            R.id.sync -> syncDavFunc()
             R.id.sort -> showSortingDialog()
             R.id.filter -> showFilterMediaDialog()
             R.id.open_camera -> launchCamera()
@@ -329,37 +324,16 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
     }
 
     
-    private fun debugDavFunc() {
-        directories_empty_placeholder.beGone()
-        directories_empty_placeholder_2.beGone()
-        davbar_progress.beVisible()
-        davbar_text.text = "WebDav synchronization..."
-        davbar_text.beVisible()
-        Log.i(localClassName, "Debug dav")
+    private fun syncDavFunc() {
+        var davHelperService = DavHelperService(this)
         GlobalScope.launch {
-            val sardine = OkHttpSardine()
-            sardine.setCredentials("admin", "insecure")
             try {
-                val resources = sardine.list("http://admin@192.168.1.6:2342/originals")
-                resources.forEach {
-                    Log.i(localClassName, it.name)
-                }
-                runOnUiThread {
-                    davbar_progress.beGone()
-                    davbar_text.beGone()
-                    directories_empty_placeholder.beVisible()
-                    directories_empty_placeholder_2.beVisible()
-                }
-
+                davHelperService.syncTask()
             }
             catch (e: IOException){
                 Log.e(localClassName, e.message)
                 e.printStackTrace()
-                runOnUiThread {
-                    davbar_text.text = "WebDav synchronization error...."
-                    davbar_progress.beGone()
-                }
-
+                toast("Dav synchronization error, check configuration")
             }
         }
 

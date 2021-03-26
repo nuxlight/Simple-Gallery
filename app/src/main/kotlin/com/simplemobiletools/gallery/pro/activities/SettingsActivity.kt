@@ -99,19 +99,21 @@ class SettingsActivity : SimpleActivity() {
     private fun setupWebDavPassword() {
         settings_webdav_password_holder.setOnClickListener {
             Log.i("settings", "password section")
+            WebDavConfigDialog(this, "Set password for WebDav", "WEBDAV_PASSWORD")
         }
     }
 
     private fun setupWebDavUsername() {
         settings_webdav_username_holder.setOnClickListener {
             Log.i("settings", "go to user")
+            WebDavConfigDialog(this, "Set username for WebDav", "WEBDAV_USERNAME")
         }
     }
 
     private fun setupWebDavServerUrl() {
         settings_webdav_server_holder.setOnClickListener {
             Log.i("settings", "go to server")
-            WebDavConfigDialog(this)
+            WebDavConfigDialog(this, "Set server URL for WebDav", "WEBDAV_URL")
         }
     }
 
