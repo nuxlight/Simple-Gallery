@@ -44,7 +44,6 @@ import com.simplemobiletools.gallery.pro.jobs.NewPhotoFetcher
 import com.simplemobiletools.gallery.pro.models.Directory
 import com.simplemobiletools.gallery.pro.models.Medium
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -325,8 +324,8 @@ class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
 
     
     private fun syncDavFunc() {
-        var davHelperService = DavHelperService(this)
-        GlobalScope.launch {
+        var davHelperService = DavHelperService(this,directoryDao,mediaDB)
+        ensureBackgroundThread {
             try {
                 davHelperService.syncTask()
             }
