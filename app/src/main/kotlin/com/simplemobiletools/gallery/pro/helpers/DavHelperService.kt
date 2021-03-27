@@ -6,6 +6,9 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.gallery.pro.interfaces.DirectoryDao
 import com.simplemobiletools.gallery.pro.interfaces.MediumDao
+import com.simplemobiletools.gallery.pro.models.Directory
+import com.simplemobiletools.gallery.pro.models.Medium
+import com.thegrizzlylabs.sardineandroid.DavResource
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -19,12 +22,14 @@ class DavHelperService(val activity: BaseSimpleActivity, val directoryDao: Direc
     private var WEBDAV_URL: String
     private var WEBDAV_USERNAME: String
     private var WEBDAV_PASSWORD: String
+    private var WEBDAV_FODLER_SYNCED: Set<String> = emptySet()
 
     init {
         val sharePref = activity.getSharedPreferences( "kotlinsharedpreference", Context.MODE_PRIVATE)
         WEBDAV_URL = sharePref.getString("WEBDAV_URL", "").orEmpty()
         WEBDAV_USERNAME = sharePref.getString("WEBDAV_USERNAME", "").orEmpty()
         WEBDAV_PASSWORD = sharePref.getString("WEBDAV_PASSWORD", "").orEmpty()
+        WEBDAV_FODLER_SYNCED = sharePref.getStringSet("WEBDAV_FODLER_SYNCED", emptySet()).orEmpty()
     }
 
     fun syncTask(){
@@ -34,14 +39,64 @@ class DavHelperService(val activity: BaseSimpleActivity, val directoryDao: Direc
             //val resources = sardine.list("http://admin@192.168.1.6:2342/originals")
             checkRootFolder(sardine)
             pushPictureToDav(sardine)
-            val resources = sardine.list(formatUrl(WEBDAV_URL))
-            resources.forEach {
-                Log.i(CLASSE_NAME, it.name)
-            }
+            getPictureFromDav(sardine)
             activity.toast("Dav synchronization ok")
         }
         else {
             activity.toast("No credentials please configure WebDab")
+        }
+    }
+
+    /**
+     * This function get all picture presents in WebDav server if is not present in phone
+     */
+    private fun getPictureFromDav(sardine: OkHttpSardine) {
+        val GET_URL = "$WEBDAV_URL/$SIMPLE_GALLERY_DAV_FOLDER"
+        val folders = sardine.list(formatUrl(GET_URL))
+        folders.forEach {
+            val folder = it.name
+            val syncDir = WEBDAV_FODLER_SYNCED.find { it == folder }
+            // Test if folder already exist in memory card if not create it
+            if (syncDir!=null){
+                // Test if dir already exist
+                if (directoryDao.getAll().find { it.name == syncDir }==null)
+                    createNewDirectory(syncDir)
+                // get ALL media
+                val webdavPictures = sardine.list(formatUrl("$GET_URL/$folder"))
+                importWebdavMedias(webdavPictures, folder, syncDir)
+            }
+        }
+    }
+
+    private fun createNewDirectory(syncDir: String) {
+        var newDir = Directory()
+        newDir.location
+    }
+
+    private fun importWebdavMedias(webdavPictures: List<DavResource>, folder: String?, syncDir: String) {
+        webdavPictures.forEach {
+            if (it.name!=folder){
+                val image = it.name
+                val internalPicture = mediaDB.getMediaFromPath(syncDir).find { it.name == image }
+                if (internalPicture==null){
+                    createNewMedium(it)
+                }
+                else {
+                    Log.d(CLASSE_NAME, "In folder $folder => image : ${it.name} already present")
+                }
+            }
+        }
+    }
+
+    private fun createNewMedium(it: DavResource?) {
+        if (it !=null) {
+            var medium = Medium()
+            medium.name = it.name
+            medium.path = formatUrl(WEBDAV_URL+it.href.toString())
+            medium.gridPosition = 0
+            medium.isFavorite = false
+            mediaDB.insert(medium)
+            Log.d(CLASSE_NAME, "New image saved ${it.name}")
         }
     }
 
