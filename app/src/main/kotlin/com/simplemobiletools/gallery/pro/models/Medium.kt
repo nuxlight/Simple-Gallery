@@ -30,10 +30,11 @@ data class Medium(
     @ColumnInfo(name = "is_favorite") var isFavorite: Boolean,
     @ColumnInfo(name = "deleted_ts") var deletedTS: Long,
 
-    @Ignore var gridPosition: Int = 0   // used at grid view decoration at Grouping enabled
+    @Ignore var gridPosition: Int = 0,   // used at grid view decoration at Grouping enabled
+    @ColumnInfo(name = "is_cloud") var isCloud: Boolean = false
 ) : Serializable, ThumbnailItem() {
 
-    constructor() : this(null, "", "", "", 0L, 0L, 0L, 0, 0, false, 0L, 0)
+    constructor() : this(null, "", "", "", 0L, 0L, 0L, 0, 0, false, 0L, 0,false)
 
     companion object {
         private const val serialVersionUID = -6553149366975655L
