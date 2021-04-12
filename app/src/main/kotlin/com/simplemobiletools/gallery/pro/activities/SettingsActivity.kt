@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -12,10 +13,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.dialogs.ChangeFileThumbnailStyleDialog
-import com.simplemobiletools.gallery.pro.dialogs.ChangeFolderThumbnailStyleDialog
-import com.simplemobiletools.gallery.pro.dialogs.ManageBottomActionsDialog
-import com.simplemobiletools.gallery.pro.dialogs.ManageExtendedDetailsDialog
+import com.simplemobiletools.gallery.pro.dialogs.*
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.emptyTheRecycleBin
 import com.simplemobiletools.gallery.pro.extensions.mediaDB
@@ -92,6 +90,31 @@ class SettingsActivity : SimpleActivity() {
         setupExportSettings()
         setupImportSettings()
         invalidateOptionsMenu()
+        // TODO : Add Dav settings
+        setupWebDavServerUrl()
+        setupWebDavUsername()
+        setupWebDavPassword()
+    }
+
+    private fun setupWebDavPassword() {
+        settings_webdav_password_holder.setOnClickListener {
+            Log.i("settings", "password section")
+            WebDavConfigDialog(this, "Set password for WebDav", "WEBDAV_PASSWORD")
+        }
+    }
+
+    private fun setupWebDavUsername() {
+        settings_webdav_username_holder.setOnClickListener {
+            Log.i("settings", "go to user")
+            WebDavConfigDialog(this, "Set username for WebDav", "WEBDAV_USERNAME")
+        }
+    }
+
+    private fun setupWebDavServerUrl() {
+        settings_webdav_server_holder.setOnClickListener {
+            Log.i("settings", "go to server")
+            WebDavConfigDialog(this, "Set server URL for WebDav", "WEBDAV_URL")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -111,7 +134,7 @@ class SettingsActivity : SimpleActivity() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
         arrayListOf(visibility_label, videos_label, thumbnails_label, scrolling_label, fullscreen_media_label, security_label,
             file_operations_label, deep_zoomable_images_label, extended_details_label, bottom_actions_label, recycle_bin_label,
-            migrating_label).forEach {
+            migrating_label, webdav_label).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }

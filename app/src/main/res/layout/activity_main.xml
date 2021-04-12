@@ -10,6 +10,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ProgressBar
+            android:id="@+id/davbar_progress"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:paddingTop="@dimen/activity_margin"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/davbar_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/directories_switch_searching"
+            android:alpha="0.8"
+            android:gravity="center_horizontal"
+            android:paddingStart="20dp"
+            android:paddingTop="@dimen/activity_margin"
+            android:paddingEnd="@dimen/activity_margin"
+            android:textSize="@dimen/bigger_text_size"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/directories_switch_searching"
             android:layout_width="match_parent"

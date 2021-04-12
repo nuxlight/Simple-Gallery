@@ -419,7 +419,11 @@
         <b>Reddit:</b>
         https://www.reddit.com/r/SimpleMobileTools
     </string>
-
+    <string name="webdav_section" translatable="false">Webdav</string>
+    <string name="sync">Synchronization</string>
+    <string name="webdav_url">Server url</string>
+    <string name="webdav_username">Username</string>
+    <string name="webdav_password">Password</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

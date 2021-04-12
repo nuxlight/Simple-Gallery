@@ -14,12 +14,15 @@ import android.provider.MediaStore.Video
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
@@ -47,7 +50,7 @@ import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : SimpleActivity(), DirectoryOperationsListener {
+class MainActivity() : SimpleActivity(), DirectoryOperationsListener {
     private val PICK_MEDIA = 2
     private val PICK_WALLPAPER = 3
     private val LAST_MEDIA_CHECK_PERIOD = 3000L
@@ -300,6 +303,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.sync -> syncDavFunc(item)
             R.id.sort -> showSortingDialog()
             R.id.filter -> showFilterMediaDialog()
             R.id.open_camera -> launchCamera()
@@ -318,6 +322,28 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    
+    private fun syncDavFunc(item: MenuItem) {
+        val rotationAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh)
+        rotationAnim.repeatCount = Animation.INFINITE
+        item.icon
+        val davHelperService = DavHelperService(this,directoryDao,mediaDB, window)
+        var loadBar = Snackbar.make(window.findViewById(R.id.directories_refresh_layout), "Dav sync", Snackbar.LENGTH_INDEFINITE)
+        ensureBackgroundThread {
+            try {
+                davHelperService.syncTask()
+                loadBar.show()
+            }
+            catch (e: IOException){
+                loadBar.dismiss()
+                e.printStackTrace()
+                Snackbar.make(window.findViewById(R.id.directories_refresh_layout),
+                    "Dav synchronization error, check configuration", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
